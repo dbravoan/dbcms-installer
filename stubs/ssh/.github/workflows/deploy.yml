@@ -1,0 +1,52 @@
+name: Desplegar aplicación
+on:
+  push:
+    branches: [main]
+    paths-ignore: ['docs/**', '**/*.md']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: production
+  cancel-in-progress: false
+jobs:
+  deploy:
+    if: vars.DEPLOY_ENABLED == 'true' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-24.04
+    environment: production
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/cache@v4
+        with:
+          path: ${{ runner.temp }}/deploy-cache
+          key: deploy-${{ runner.os }}-${{ hashFiles('composer.lock', 'package-lock.json') }}
+          restore-keys: deploy-${{ runner.os }}-
+      - name: Construir aplicación desde sus locks
+        env:
+          COMPOSER_AUTH: '{"github-oauth":{"github.com":"${{ github.token }}"}}'
+          PRIVATE_COMPOSER_AUTH: ${{ secrets.COMPOSER_AUTH }}
+        run: |
+          set -euo pipefail
+          if [[ -n "$PRIVATE_COMPOSER_AUTH" ]]; then export COMPOSER_AUTH="$PRIVATE_COMPOSER_AUTH"; fi
+          mkdir -p "$RUNNER_TEMP/artifact" "$RUNNER_TEMP/deploy-cache/composer" "$RUNNER_TEMP/deploy-cache/npm"
+          docker build --file docker/deploy/Dockerfile --tag project-build .
+          docker run --rm --env COMPOSER_AUTH --env GITHUB_SHA \
+            --volume "$PWD:/app" --volume "$RUNNER_TEMP/artifact:/output" \
+            --volume "$RUNNER_TEMP/deploy-cache/composer:/cache/composer" \
+            --volume "$RUNNER_TEMP/deploy-cache/npm:/cache/npm" \
+            project-build bash .github/scripts/build.sh /output/application.tar.gz
+      - name: Transferir y activar
+        env:
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+          VPS_USER: ${{ secrets.VPS_USER }}
+          VPS_PORT: ${{ secrets.VPS_PORT || '22' }}
+          VPS_DIR: ${{ secrets.VPS_DIR }}
+          VPS_SSH_KEY: ${{ secrets.VPS_SSH_KEY }}
+          VPS_SSH_FINGERPRINT: ${{ secrets.VPS_SSH_FINGERPRINT }}
+          DEPLOY_URL: ${{ vars.DEPLOY_URL }}
+          VPS_PHP_BINARY: ${{ vars.VPS_PHP_BINARY || 'php' }}
+          VPS_FPM_SERVICE: ${{ vars.VPS_FPM_SERVICE }}
+        run: bash .github/scripts/deploy.sh "$RUNNER_TEMP/artifact/application.tar.gz"

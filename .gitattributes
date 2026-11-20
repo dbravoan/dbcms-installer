@@ -1,0 +1,16 @@
+/.build export-ignore
+/.github export-ignore
+/.gitignore export-ignore
+/.gitattributes export-ignore
+/tests export-ignore
+/tooling export-ignore
+/docker export-ignore
+/AGENTS.md export-ignore
+/compose.yaml export-ignore
+/phpstan.neon export-ignore
+/phpunit.xml export-ignore
+/pint.json export-ignore
+/.env export-ignore
+/.env.* export-ignore
+/node_modules export-ignore
+/vendor export-ignore

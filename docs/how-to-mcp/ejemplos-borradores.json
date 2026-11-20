@@ -1,0 +1,752 @@
+[
+  {
+    "type": "post",
+    "attributes": {
+      "category_id": 1,
+      "is_featured": true
+    },
+    "translations": {
+      "es": {
+        "title": "Instalar dbCMS desde una base vacía",
+        "slug": "instalar-dbcms-desde-cero",
+        "summary": "Del comando dbcms new a la primera portada, con una comprobación por cada etapa."
+      }
+    },
+    "sections_json": {
+      "es": [
+        {
+          "title": "Prepara el entorno",
+          "type": "text",
+          "columns_layout": "1",
+          "columns": [
+            {
+              "id": "col-0",
+              "blocks": [
+                {
+                  "id": "texto-1",
+                  "type": "rich_text",
+                  "format": "html",
+                  "content": "<p>Usa PHP 8.4, Composer 2, Node.js 22.12 o superior y una base MySQL vacía con un usuario propio. Elige el tema y los módulos antes de ejecutar dbcms new para que Composer registre la composición inicial.</p>"
+                }
+              ]
+            }
+          ],
+          "id": "seccion-1"
+        },
+        {
+          "title": "Completa el asistente",
+          "type": "text",
+          "columns_layout": "1",
+          "columns": [
+            {
+              "id": "col-0",
+              "blocks": [
+                {
+                  "id": "texto-2",
+                  "type": "rich_text",
+                  "format": "html",
+                  "content": "<p>Arranca la aplicación, abre /install y usa el código de la instalación. Prueba la conexión, elige instalación limpia y configura el nombre del sitio, la cuenta administradora y los tratamientos de privacidad.</p>"
+                }
+              ]
+            }
+          ],
+          "id": "seccion-2"
+        },
+        {
+          "title": "Comprueba el resultado",
+          "type": "text",
+          "columns_layout": "1",
+          "columns": [
+            {
+              "id": "col-0",
+              "blocks": [
+                {
+                  "id": "texto-3",
+                  "type": "rich_text",
+                  "format": "html",
+                  "content": "<p>En la confirmación revisa los enlaces a la portada y al panel. Entra con la cuenta creada y comprueba el estado de cada módulo. Si tu primera página usa el slug home, verifica que se abra desde la raíz del sitio.</p>"
+                }
+              ]
+            }
+          ],
+          "id": "seccion-3"
+        }
+      ]
+    }
+  },
+  {
+    "type": "post",
+    "attributes": {
+      "category_id": 1,
+      "is_featured": false
+    },
+    "translations": {
+      "es": {
+        "title": "Entender los archivos que genera Installer",
+        "slug": "archivos-del-proyecto-dbcms",
+        "summary": "El mapa del proyecto para quien abre el repositorio por primera vez."
+      }
+    },
+    "sections_json": {
+      "es": [
+        {
+          "title": "Identifica la web",
+          "type": "text",
+          "columns_layout": "1",
+          "columns": [
+            {
+              "id": "col-0",
+              "blocks": [
+                {
+                  "id": "texto-1",
+                  "type": "rich_text",
+                  "format": "html",
+                  "content": "<p>El README registra la composición inicial. Al sellar la instalación incorpora el nombre público y el titular. Esa ficha sirve para reconocer el sitio; consulta el entorno para la URL efectiva y el acceso al panel.</p>"
+                }
+              ]
+            }
+          ],
+          "id": "seccion-1"
+        },
+        {
+          "title": "Reproduce la composición",
+          "type": "text",
+          "columns_layout": "1",
+          "columns": [
+            {
+              "id": "col-0",
+              "blocks": [
+                {
+                  "id": "texto-2",
+                  "type": "rich_text",
+                  "format": "html",
+                  "content": "<p>Conserva composer.json y composer.lock para restaurar las dependencias, y guarda los archivos de frontend que fijan su compilación. Usa .env.example como plantilla y configura cada entorno con sus propias credenciales.</p>"
+                }
+              ]
+            }
+          ],
+          "id": "seccion-2"
+        },
+        {
+          "title": "Comparte las convenciones",
+          "type": "text",
+          "columns_layout": "1",
+          "columns": [
+            {
+              "id": "col-0",
+              "blocks": [
+                {
+                  "id": "texto-3",
+                  "type": "rich_text",
+                  "format": "html",
+                  "content": "<p>AGENTS.md enlaza la arquitectura, los contratos de extensiones y el kit visual de Core. Los archivos de los demás asistentes apuntan a las mismas instrucciones. Los cambios propios viven en tu proyecto y en sus paquetes.</p>"
+                }
+              ]
+            }
+          ],
+          "id": "seccion-3"
+        }
+      ]
+    }
+  },
+  {
+    "type": "post",
+    "attributes": {
+      "category_id": 1,
+      "is_featured": false
+    },
+    "translations": {
+      "es": {
+        "title": "Instalar y activar un módulo de dbCMS",
+        "slug": "instalar-y-activar-modulos-dbcms",
+        "summary": "Distingue el paquete disponible, la instalación y la activación de sus funciones."
+      }
+    },
+    "sections_json": {
+      "es": [
+        {
+          "title": "Comprueba el contrato",
+          "type": "text",
+          "columns_layout": "1",
+          "columns": [
+            {
+              "id": "col-0",
+              "blocks": [
+                {
+                  "id": "texto-1",
+                  "type": "rich_text",
+                  "format": "html",
+                  "content": "<p>Inspecciona el requisito de Core y el tipo dbcms-module en el composer.json del paquete. Su identificador estable enlaza los metadatos de Composer con el proveedor y el catálogo del panel.</p>"
+                }
+              ]
+            }
+          ],
+          "id": "seccion-1"
+        },
+        {
+          "title": "Instala el código y actívalo",
+          "type": "text",
+          "columns_layout": "1",
+          "columns": [
+            {
+              "id": "col-0",
+              "blocks": [
+                {
+                  "id": "texto-2",
+                  "type": "rich_text",
+                  "format": "html",
+                  "content": "<p>Añade el paquete mediante Composer, compila los recursos si aporta frontend y abre Módulos del sistema. Instala el módulo y actívalo allí. Core gestiona su ciclo de vida y las comprobaciones de dependencias.</p>"
+                }
+              ]
+            }
+          ],
+          "id": "seccion-2"
+        },
+        {
+          "title": "Verifica las contribuciones",
+          "type": "text",
+          "columns_layout": "1",
+          "columns": [
+            {
+              "id": "col-0",
+              "blocks": [
+                {
+                  "id": "texto-3",
+                  "type": "rich_text",
+                  "format": "html",
+                  "content": "<p>Comprueba que aparezcan sus rutas, permisos y bloques según la cuenta usada. Repite la consulta a cms_block_types para confirmar lo que el módulo aporta al contexto de página o artículo.</p>"
+                }
+              ]
+            }
+          ],
+          "id": "seccion-3"
+        }
+      ]
+    }
+  },
+  {
+    "type": "post",
+    "attributes": {
+      "category_id": 1,
+      "is_featured": false
+    },
+    "translations": {
+      "es": {
+        "title": "Elegir un tema público y una marca de administración",
+        "slug": "temas-y-marcas-en-dbcms",
+        "summary": "Cómo decidir la apariencia del sitio y la del panel de forma independiente."
+      }
+    },
+    "sections_json": {
+      "es": [
+        {
+          "title": "Define ambos destinos",
+          "type": "text",
+          "columns_layout": "1",
+          "columns": [
+            {
+              "id": "col-0",
+              "blocks": [
+                {
+                  "id": "texto-1",
+                  "type": "rich_text",
+                  "format": "html",
+                  "content": "<p>El tema público aporta las vistas que ven los visitantes. La marca de administración cambia la apariencia del kit compartido para el equipo editorial. Anota ambos identificadores al preparar el entorno.</p>"
+                }
+              ]
+            }
+          ],
+          "id": "seccion-1"
+        },
+        {
+          "title": "Prepara las vistas propias",
+          "type": "text",
+          "columns_layout": "1",
+          "columns": [
+            {
+              "id": "col-0",
+              "blocks": [
+                {
+                  "id": "texto-2",
+                  "type": "rich_text",
+                  "format": "html",
+                  "content": "<p>Ajusta los recursos mediante el tema o los overrides del proyecto. Compila Vite después de los cambios en los recursos. Mantén los archivos de vendor como fuente instalable de los paquetes.</p>"
+                }
+              ]
+            }
+          ],
+          "id": "seccion-2"
+        },
+        {
+          "title": "Revisa la navegación",
+          "type": "text",
+          "columns_layout": "1",
+          "columns": [
+            {
+              "id": "col-0",
+              "blocks": [
+                {
+                  "id": "texto-3",
+                  "type": "rich_text",
+                  "format": "html",
+                  "content": "<p>Abre una portada y un artículo en un ancho móvil y de escritorio. Comprueba menús, tipografía y tarjetas en el sitio, y revisa los controles del editor en el panel.</p>"
+                }
+              ]
+            }
+          ],
+          "id": "seccion-3"
+        }
+      ]
+    }
+  },
+  {
+    "type": "post",
+    "attributes": {
+      "category_id": 1,
+      "is_featured": true
+    },
+    "translations": {
+      "es": {
+        "title": "Diseñar una página por secciones",
+        "slug": "paginas-por-secciones-dbcms",
+        "summary": "Una forma de elegir disposiciones y bloques a partir de lo que necesita el visitante."
+      }
+    },
+    "sections_json": {
+      "es": [
+        {
+          "title": "Da una función a cada sección",
+          "type": "text",
+          "columns_layout": "1",
+          "columns": [
+            {
+              "id": "col-0",
+              "blocks": [
+                {
+                  "id": "texto-1",
+                  "type": "rich_text",
+                  "format": "html",
+                  "content": "<p>Empieza por la promesa del sitio, continúa con una explicación o prueba y termina con un paso que el visitante pueda ejecutar. Pon nombres reconocibles a las secciones para encontrarlas al editar.</p>"
+                }
+              ]
+            }
+          ],
+          "id": "seccion-1"
+        },
+        {
+          "title": "Elige columnas y bloques",
+          "type": "text",
+          "columns_layout": "1",
+          "columns": [
+            {
+              "id": "col-0",
+              "blocks": [
+                {
+                  "id": "texto-2",
+                  "type": "rich_text",
+                  "format": "html",
+                  "content": "<p>Usa una columna para lectura continua y dos para relacionar información de peso similar. En una disposición asimétrica, coloca el contenido principal en la columna más ancha y reserva la otra para contexto.</p>"
+                }
+              ]
+            }
+          ],
+          "id": "seccion-2"
+        },
+        {
+          "title": "Comprueba la composición",
+          "type": "text",
+          "columns_layout": "1",
+          "columns": [
+            {
+              "id": "col-0",
+              "blocks": [
+                {
+                  "id": "texto-3",
+                  "type": "rich_text",
+                  "format": "html",
+                  "content": "<p>Abre el constructor, inspecciona el orden de las secciones y prueba la vista en móvil. Usa un ajuste puntual si ya hay una composición compartida con el equipo.</p>"
+                }
+              ]
+            }
+          ],
+          "id": "seccion-3"
+        }
+      ]
+    }
+  },
+  {
+    "type": "post",
+    "attributes": {
+      "category_id": 1,
+      "is_featured": false
+    },
+    "translations": {
+      "es": {
+        "title": "Configurar idiomas y mercados en dbCMS",
+        "slug": "idiomas-y-mercados-en-dbcms",
+        "summary": "Tres preguntas para localizar una página de forma consistente."
+      }
+    },
+    "sections_json": {
+      "es": [
+        {
+          "title": "Identifica idioma y mercado",
+          "type": "text",
+          "columns_layout": "1",
+          "columns": [
+            {
+              "id": "col-0",
+              "blocks": [
+                {
+                  "id": "texto-1",
+                  "type": "rich_text",
+                  "format": "html",
+                  "content": "<p>El idioma define cómo se redacta. El mercado identifica el contexto donde el contenido debe aparecer. Decide qué combinaciones necesita realmente el proyecto antes de duplicar textos o navegación.</p>"
+                }
+              ]
+            }
+          ],
+          "id": "seccion-1"
+        },
+        {
+          "title": "Redacta la variante que corresponde",
+          "type": "text",
+          "columns_layout": "1",
+          "columns": [
+            {
+              "id": "col-0",
+              "blocks": [
+                {
+                  "id": "texto-2",
+                  "type": "rich_text",
+                  "format": "html",
+                  "content": "<p>Coloca el título, el slug y la composición en la traducción elegida. Cuando el proyecto usa variaciones de mercado, trabaja en el contexto de esa variante y comprueba las referencias del bloque allí.</p>"
+                }
+              ]
+            }
+          ],
+          "id": "seccion-2"
+        },
+        {
+          "title": "Prueba como visitante",
+          "type": "text",
+          "columns_layout": "1",
+          "columns": [
+            {
+              "id": "col-0",
+              "blocks": [
+                {
+                  "id": "texto-3",
+                  "type": "rich_text",
+                  "format": "html",
+                  "content": "<p>Abre las variantes desde el selector público y comprueba sus enlaces. En MCP pasa locale y market al catálogo de bloques para usar el mismo contexto del contenido final.</p>"
+                }
+              ]
+            }
+          ],
+          "id": "seccion-3"
+        }
+      ]
+    }
+  },
+  {
+    "type": "post",
+    "attributes": {
+      "category_id": 1,
+      "is_featured": true
+    },
+    "translations": {
+      "es": {
+        "title": "Conectar MCP Inspector con dbCMS",
+        "slug": "conectar-mcp-inspector-a-dbcms",
+        "summary": "Desde el endpoint y los scopes hasta la primera consulta autenticada."
+      }
+    },
+    "sections_json": {
+      "es": [
+        {
+          "title": "Localiza el endpoint",
+          "type": "text",
+          "columns_layout": "1",
+          "columns": [
+            {
+              "id": "col-0",
+              "blocks": [
+                {
+                  "id": "texto-1",
+                  "type": "rich_text",
+                  "format": "html",
+                  "content": "<p>Abre Servidor MCP en el panel y copia la URL de conexión. En un sitio remoto usa HTTPS. El transporte en Inspector es streamable-http.</p>"
+                }
+              ]
+            }
+          ],
+          "id": "seccion-1"
+        },
+        {
+          "title": "Empieza con lectura",
+          "type": "text",
+          "columns_layout": "1",
+          "columns": [
+            {
+              "id": "col-0",
+              "blocks": [
+                {
+                  "id": "texto-2",
+                  "type": "rich_text",
+                  "format": "html",
+                  "content": "<p>Emite un token Passport con mcp:access y mcp:read y configura Authorization como Bearer seguido del token. Conecta y ejecuta cms_capabilities para comprobar qué herramientas están disponibles.</p>"
+                }
+              ]
+            }
+          ],
+          "id": "seccion-2"
+        },
+        {
+          "title": "Retira el acceso de prueba",
+          "type": "text",
+          "columns_layout": "1",
+          "columns": [
+            {
+              "id": "col-0",
+              "blocks": [
+                {
+                  "id": "texto-3",
+                  "type": "rich_text",
+                  "format": "html",
+                  "content": "<p>Emite otro token con mcp:write solo para editar. Al terminar desconecta Inspector, borra la cabecera del catálogo del cliente y revoca los tokens usados.</p>"
+                }
+              ]
+            }
+          ],
+          "id": "seccion-3"
+        }
+      ]
+    }
+  },
+  {
+    "type": "post",
+    "attributes": {
+      "category_id": 1,
+      "is_featured": false
+    },
+    "translations": {
+      "es": {
+        "title": "Editar un bloque de dbCMS sin sustituir la página",
+        "slug": "editar-un-bloque-con-mcp",
+        "summary": "Cómo leer la versión y hacer una modificación acotada desde MCP."
+      }
+    },
+    "sections_json": {
+      "es": [
+        {
+          "title": "Lee la composición",
+          "type": "text",
+          "columns_layout": "1",
+          "columns": [
+            {
+              "id": "col-0",
+              "blocks": [
+                {
+                  "id": "texto-1",
+                  "type": "rich_text",
+                  "format": "html",
+                  "content": "<p>Ejecuta cms_content_sections_get con la entidad, el identificador y el idioma. Su vista summary devuelve la versión y el orden de secciones, columnas y bloques. Localiza el identificador del bloque que quieres editar.</p>"
+                }
+              ]
+            }
+          ],
+          "id": "seccion-1"
+        },
+        {
+          "title": "Envía el cambio puntual",
+          "type": "text",
+          "columns_layout": "1",
+          "columns": [
+            {
+              "id": "col-0",
+              "blocks": [
+                {
+                  "id": "texto-2",
+                  "type": "rich_text",
+                  "format": "html",
+                  "content": "<p>Usa cms_content_sections_patch con esa versión y una operación update sobre node_id. Envía únicamente los campos que cambian. Si otra edición ha actualizado la versión, lee el contenido actual antes de aplicar el cambio.</p>"
+                }
+              ]
+            }
+          ],
+          "id": "seccion-2"
+        },
+        {
+          "title": "Valida el resultado",
+          "type": "text",
+          "columns_layout": "1",
+          "columns": [
+            {
+              "id": "col-0",
+              "blocks": [
+                {
+                  "id": "texto-3",
+                  "type": "rich_text",
+                  "format": "html",
+                  "content": "<p>Lee otra vez el bloque y su sección. Comprueba en el editor visual que el resto de la composición sigue en su sitio. Reserva sync para un reemplazo deliberado de toda la composición indicada.</p>"
+                }
+              ]
+            }
+          ],
+          "id": "seccion-3"
+        }
+      ]
+    }
+  },
+  {
+    "type": "post",
+    "attributes": {
+      "category_id": 1,
+      "is_featured": false
+    },
+    "translations": {
+      "es": {
+        "title": "Revisar un borrador de Blog antes de publicar",
+        "slug": "revisar-borradores-del-blog-dbcms",
+        "summary": "Una revisión editorial centrada en contenido, identidad y enlaces."
+      }
+    },
+    "sections_json": {
+      "es": [
+        {
+          "title": "Separa el resumen del cuerpo",
+          "type": "text",
+          "columns_layout": "1",
+          "columns": [
+            {
+              "id": "col-0",
+              "blocks": [
+                {
+                  "id": "texto-1",
+                  "type": "rich_text",
+                  "format": "html",
+                  "content": "<p>Usa el resumen para explicar qué gana el lector y el cuerpo por secciones para desarrollar el tema. Asigna una categoría y elige un slug que puedas mantener durante la vida del artículo.</p>"
+                }
+              ]
+            }
+          ],
+          "id": "seccion-1"
+        },
+        {
+          "title": "Comprueba el editor",
+          "type": "text",
+          "columns_layout": "1",
+          "columns": [
+            {
+              "id": "col-0",
+              "blocks": [
+                {
+                  "id": "texto-2",
+                  "type": "rich_text",
+                  "format": "html",
+                  "content": "<p>Revisa que el título, la introducción y el procedimiento se vean en el constructor. Verifica los enlaces y las variantes disponibles. Si marcas un artículo destacado, revisa el bloque de la portada que lo consumirá.</p>"
+                }
+              ]
+            }
+          ],
+          "id": "seccion-2"
+        },
+        {
+          "title": "Solicita aprobación",
+          "type": "text",
+          "columns_layout": "1",
+          "columns": [
+            {
+              "id": "col-0",
+              "blocks": [
+                {
+                  "id": "texto-3",
+                  "type": "rich_text",
+                  "format": "html",
+                  "content": "<p>Guarda como borrador mientras redactas. Envía a revisión según el flujo del sitio. Una publicación solicitada por MCP necesita aprobación humana en el panel de dbCMS.</p>"
+                }
+              ]
+            }
+          ],
+          "id": "seccion-3"
+        }
+      ]
+    }
+  },
+  {
+    "type": "post",
+    "attributes": {
+      "category_id": 1,
+      "is_featured": false
+    },
+    "translations": {
+      "es": {
+        "title": "Preparar un despliegue SSH de dbCMS",
+        "slug": "preparar-despliegue-ssh-dbcms",
+        "summary": "Qué revisar antes de activar el workflow que genera Installer."
+      }
+    },
+    "sections_json": {
+      "es": [
+        {
+          "title": "Comprueba el proyecto",
+          "type": "text",
+          "columns_layout": "1",
+          "columns": [
+            {
+              "id": "col-0",
+              "blocks": [
+                {
+                  "id": "texto-1",
+                  "type": "rich_text",
+                  "format": "html",
+                  "content": "<p>Verifica que la aplicación se reproduce desde un checkout limpio y que Composer y Vite construyen los recursos. Lee docs/DEPLOYMENT.md de la aplicación generada para preparar el servidor y el entorno.</p>"
+                }
+              ]
+            }
+          ],
+          "id": "seccion-1"
+        },
+        {
+          "title": "Configura el repositorio",
+          "type": "text",
+          "columns_layout": "1",
+          "columns": [
+            {
+              "id": "col-0",
+              "blocks": [
+                {
+                  "id": "texto-2",
+                  "type": "rich_text",
+                  "format": "html",
+                  "content": "<p>Crea los secretos de GitHub Actions con el usuario, el host, la clave y los datos exigidos por la guía. Conserva el entorno y el almacenamiento persistente en el destino y comprueba la identidad SSH del servidor.</p>"
+                }
+              ]
+            }
+          ],
+          "id": "seccion-2"
+        },
+        {
+          "title": "Valida la entrega",
+          "type": "text",
+          "columns_layout": "1",
+          "columns": [
+            {
+              "id": "col-0",
+              "blocks": [
+                {
+                  "id": "texto-3",
+                  "type": "rich_text",
+                  "format": "html",
+                  "content": "<p>Activa el workflow cuando el destino esté preparado. Comprueba el resultado de la automatización, la respuesta de la web y el acceso al panel. Conserva una entrega anterior para poder recuperar el servicio.</p>"
+                }
+              ]
+            }
+          ],
+          "id": "seccion-3"
+        }
+      ]
+    }
+  }
+]

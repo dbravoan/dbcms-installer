@@ -1,0 +1,67 @@
+{
+    "name": "dbravoan/dbcms-installer",
+    "description": "Instalador CLI de aplicaciones Laravel con dbCMS y extensiones Composer independientes.",
+    "type": "library",
+    "license": "MIT",
+    "require": {
+        "php": "^8.4",
+        "symfony/console": "^7.4",
+        "symfony/process": "^7.4"
+    },
+    "require-dev": {
+        "laravel/pint": "^1.27",
+        "pestphp/pest": "^4.0",
+        "phpstan/phpstan": "^2.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "DbCms\\Installer\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
+    "bin": [
+        "bin/dbcms"
+    ],
+    "scripts": {
+        "test": "pest",
+        "check": [
+            "@composer validate --strict",
+            "pint --test",
+            "phpstan analyse --memory-limit=1G",
+            "@composer audit"
+        ],
+        "test:dist": "@php tooling/dist.php"
+    },
+    "config": {
+        "sort-packages": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
+    },
+    "archive": {
+        "exclude": [
+            "/.build",
+            "/.git",
+            "/.github",
+            "/tests",
+            "/tooling",
+            "/docker",
+            "/vendor",
+            "/compose.yaml",
+            "/phpstan.neon",
+            "/phpunit.xml",
+            "/pint.json",
+            "/.env",
+            "/.env.*",
+            "/node_modules"
+        ]
+    },
+    "support": {
+        "issues": "https://github.com/dbravoan/dbcms-installer/issues",
+        "source": "https://github.com/dbravoan/dbcms-installer"
+    }
+}

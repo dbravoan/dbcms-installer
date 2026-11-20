@@ -1,0 +1,7 @@
+---
+description: Trabajar en un módulo, tema o composición de dbCMS
+---
+
+Lee AGENTS.md, abre el skill de la tarea y consulta el Core instalado. Localiza el patrón reutilizable y verifica el cambio en su entrada normal.
+
+$ARGUMENTS

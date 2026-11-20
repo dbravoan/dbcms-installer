@@ -1,0 +1,15 @@
+services:
+  tools:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    working_dir: /workspace/package
+    volumes:
+      - .:/workspace/package
+    environment:
+      NODE_OPTIONS: --dns-result-order=ipv4first
+      npm_config_cache: /workspace/package/.build/npm-cache
+      COMPOSER_AUTH: ${COMPOSER_AUTH:-}
+      COMPOSER_ALLOW_SUPERUSER: 1
+      COMPOSER_CACHE_DIR: /workspace/package/.build/composer-cache
+      COMPOSER_IPRESOLVE: 4

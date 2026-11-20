@@ -1,0 +1,329 @@
+{
+  "type": "page",
+  "translations": {
+    "es": {
+      "title": "Portada de dbCMS",
+      "slug": "portada-dbcms"
+    }
+  },
+  "sections_json": {
+    "es": [
+      {
+        "id": "hero",
+        "type": "text",
+        "title": "Presentación",
+        "columns_layout": "2-1",
+        "columns": [
+          {
+            "id": "hero-col-1",
+            "blocks": [
+              {
+                "id": "hero-titulo",
+                "type": "heading",
+                "text": "Construye con dbCMS",
+                "level": "h1",
+                "appearance": {
+                  "base": {
+                    "font_size": "4.6rem",
+                    "line_height": "4.8rem",
+                    "color": "#e2fff9"
+                  },
+                  "mobile": {
+                    "font_size": "2.5rem",
+                    "line_height": "2.75rem"
+                  }
+                }
+              },
+              {
+                "id": "hero-texto",
+                "type": "rich_text",
+                "format": "html",
+                "content": "<p>Instala, diseña y amplía tu sitio desde un constructor visual y un servidor MCP conectado a tu catálogo real.</p>"
+              },
+              {
+                "id": "hero-blog",
+                "type": "button",
+                "label": "Explorar el blog",
+                "url": "/blog",
+                "action": "link",
+                "variant": "primary"
+              },
+              {
+                "id": "hero-juegos",
+                "type": "button",
+                "label": "Entrar a la zona de juegos",
+                "url": "/zona-juegos",
+                "action": "link",
+                "variant": "secondary"
+              }
+            ]
+          },
+          {
+            "id": "hero-col-2",
+            "blocks": [
+              {
+                "id": "hero-kpi",
+                "type": "kpi",
+                "title": "En el laboratorio",
+                "items": [
+                  {
+                    "value": "10",
+                    "label": "artículos de dbCMS"
+                  },
+                  {
+                    "value": "2",
+                    "label": "juegos Canvas"
+                  },
+                  {
+                    "value": "3",
+                    "label": "artículos destacados"
+                  }
+                ],
+                "container_style": "cyber-glass"
+              }
+            ]
+          }
+        ],
+        "bg_type": "color",
+        "bg_color": "#111e34",
+        "padding": "5rem 2rem",
+        "animation": "fadeInUp",
+        "animation_duration": "800ms"
+      },
+      {
+        "id": "recorrido",
+        "type": "text",
+        "title": "Tres puntos de partida",
+        "columns_layout": "3",
+        "columns": [
+          {
+            "id": "recorrido-col-1",
+            "blocks": [
+              {
+                "id": "paso-instalar",
+                "type": "heading",
+                "text": "Arranca desde cero",
+                "level": "h2",
+                "appearance": {}
+              },
+              {
+                "id": "paso-instalar-texto",
+                "type": "rich_text",
+                "format": "html",
+                "content": "<p>Sigue el asistente y comprueba tu primera página desde el panel.</p>"
+              },
+              {
+                "id": "paso-instalar-enlace",
+                "type": "button",
+                "label": "Leer guías de instalación",
+                "url": "/blog",
+                "action": "link",
+                "variant": "secondary"
+              }
+            ]
+          },
+          {
+            "id": "recorrido-col-2",
+            "blocks": [
+              {
+                "id": "paso-diseno",
+                "type": "heading",
+                "text": "Diseña por secciones",
+                "level": "h2",
+                "appearance": {}
+              },
+              {
+                "id": "paso-diseno-texto",
+                "type": "rich_text",
+                "format": "html",
+                "content": "<p>Combina columnas, bloques y variantes sin perder el control del contenido.</p>"
+              }
+            ]
+          },
+          {
+            "id": "recorrido-col-3",
+            "blocks": [
+              {
+                "id": "paso-asistentes",
+                "type": "heading",
+                "text": "Conecta a tu agente",
+                "level": "h2",
+                "appearance": {}
+              },
+              {
+                "id": "paso-asistentes-texto",
+                "type": "rich_text",
+                "format": "html",
+                "content": "<p>Descubre las capacidades activas y prepara borradores que puedas abrir en el editor.</p>"
+              }
+            ]
+          }
+        ],
+        "bg_type": "color",
+        "bg_color": "#152c35",
+        "padding": "3rem 2rem",
+        "animation": "fadeInLeft",
+        "animation_duration": "650ms"
+      },
+      {
+        "id": "noticias",
+        "type": "text",
+        "title": "Noticias destacadas",
+        "columns_layout": "1",
+        "columns": [
+          {
+            "id": "noticias-col-1",
+            "blocks": [
+              {
+                "id": "noticias-titulo",
+                "type": "heading",
+                "text": "Noticias destacadas",
+                "level": "h2",
+                "appearance": {}
+              },
+              {
+                "id": "noticias-bajada",
+                "type": "rich_text",
+                "format": "html",
+                "content": "<p>Guías seleccionadas para llevar tu instalación del primer arranque al trabajo diario.</p>"
+              }
+            ]
+          }
+        ],
+        "bg_type": "color",
+        "bg_color": "#102436",
+        "padding": "3rem 2rem",
+        "animation": "fadeInUp",
+        "animation_duration": "650ms"
+      },
+      {
+        "id": "noticias-listado",
+        "type": "text",
+        "title": "Parrilla del blog",
+        "columns_layout": "1",
+        "columns": [
+          {
+            "id": "noticias-listado-col-1",
+            "blocks": [
+              {
+                "id": "noticias-blog",
+                "type": "posts",
+                "title": "",
+                "selection": "featured",
+                "limit": 3,
+                "grid_columns": "3"
+              }
+            ]
+          }
+        ],
+        "bg_type": "color",
+        "bg_color": "#102436",
+        "padding": "1rem 2rem 3rem"
+      },
+      {
+        "id": "preguntas",
+        "type": "text",
+        "title": "Preguntas frecuentes",
+        "columns_layout": "1",
+        "columns": [
+          {
+            "id": "preguntas-col-1",
+            "blocks": [
+              {
+                "id": "preguntas-titulo",
+                "type": "heading",
+                "text": "Preguntas frecuentes",
+                "level": "h2",
+                "appearance": {}
+              },
+              {
+                "id": "preguntas-acordeon",
+                "type": "accordion",
+                "label": "Preguntas frecuentes sobre dbCMS",
+                "items": [
+                  {
+                    "title": "¿Puedo combinar el editor y MCP?",
+                    "open": true,
+                    "children": [
+                      {
+                        "id": "faq-mcp",
+                        "type": "rich_text",
+                        "format": "html",
+                        "content": "<p>Sí. Una composición creada con sections_json se abre en el constructor visual.</p>"
+                      }
+                    ]
+                  },
+                  {
+                    "title": "¿De dónde salen las noticias destacadas?",
+                    "children": [
+                      {
+                        "id": "faq-blog",
+                        "type": "rich_text",
+                        "format": "html",
+                        "content": "<p>Del Blog. El bloque consulta los artículos publicados y destacados del contexto de la página.</p>"
+                      }
+                    ]
+                  },
+                  {
+                    "title": "¿Cómo se protegen los juegos?",
+                    "children": [
+                      {
+                        "id": "faq-juegos",
+                        "type": "rich_text",
+                        "format": "html",
+                        "content": "<p>Cada jugador entra con una cuenta del módulo de área privada.</p>"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "bg_type": "color",
+        "bg_color": "#182036",
+        "padding": "3rem 2rem",
+        "animation": "zoomIn",
+        "animation_duration": "650ms"
+      },
+      {
+        "id": "juegos",
+        "type": "text",
+        "title": "Invitación a jugar",
+        "columns_layout": "1",
+        "columns": [
+          {
+            "id": "juegos-col-1",
+            "blocks": [
+              {
+                "id": "juegos-titulo",
+                "type": "heading",
+                "text": "Juega en tu zona privada",
+                "level": "h2",
+                "appearance": {}
+              },
+              {
+                "id": "juegos-texto",
+                "type": "rich_text",
+                "format": "html",
+                "content": "<p>Crea una cuenta de jugador para acceder a Atrapa el punto y Esquiva bloques.</p>"
+              },
+              {
+                "id": "juegos-enlace",
+                "type": "button",
+                "label": "Abrir zona de juegos",
+                "url": "/zona-juegos",
+                "action": "link",
+                "variant": "primary"
+              }
+            ]
+          }
+        ],
+        "bg_type": "color",
+        "bg_color": "#16303d",
+        "padding": "4rem 2rem",
+        "animation": "fadeInUp"
+      }
+    ]
+  }
+}

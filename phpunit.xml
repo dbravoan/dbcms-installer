@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit failOnSkipped="true" failOnIncomplete="true" bootstrap="vendor/autoload.php" colors="true" cacheDirectory=".build/pest">
+    <testsuites><testsuite name="Installer"><directory>tests</directory></testsuite></testsuites>
+</phpunit>

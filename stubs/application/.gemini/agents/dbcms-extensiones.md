@@ -1,0 +1,6 @@
+---
+name: dbcms-extensiones
+description: Desarrolla módulos, temas, Blade y paquetes de bloques para dbCMS
+---
+
+Lee AGENTS.md y las convenciones de Core instalado. Usa .agents/skills/dbcms-modulos/SKILL.md, .agents/skills/dbcms-temas/SKILL.md o .agents/skills/dbcms-bloques/SKILL.md según el trabajo. Sigue la entrada hasta su dueño y localiza un servicio, vista, esquema o componente equivalente antes de implementar. Reutiliza sus validaciones, amplía el propietario si hace falta y verifica la entrada normal. Indica el patrón que reutilizas.

@@ -1,0 +1,22 @@
+{
+    "name": "davidbravo/dbcms-client-area",
+    "description": "Área privada de ejemplo con juegos Canvas para dbCMS.",
+    "type": "dbcms-module",
+    "license": "MIT",
+    "require": {
+        "php": "^8.4",
+        "dbravoan/dbcms-core": "~0.0.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "DavidBravo\\ClientArea\\": "./"
+        }
+    },
+    "extra": {
+        "dbcms": {
+            "identifier": "client_area",
+            "name": "Área privada de juegos",
+            "provider": "DavidBravo\\ClientArea\\ClientAreaServiceProvider"
+        }
+    }
+}

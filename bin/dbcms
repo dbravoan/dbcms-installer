@@ -1,0 +1,20 @@
+#!/usr/bin/env php
+<?php
+
+declare(strict_types=1);
+
+if (PHP_VERSION_ID < 80400) {
+    fwrite(STDERR, "dbCMS necesita PHP 8.4 o posterior.\n");
+    exit(1);
+}
+
+$autoload = $GLOBALS['_composer_autoload_path'] ?? dirname(__DIR__).'/vendor/autoload.php';
+if (! is_file($autoload)) {
+    fwrite(STDERR, "Faltan las dependencias del instalador. Ejecuta composer install.\n");
+    exit(1);
+}
+require $autoload;
+
+$application = new Symfony\Component\Console\Application('dbCMS installer');
+$application->add(new DbCms\Installer\NewCommand);
+$application->run();

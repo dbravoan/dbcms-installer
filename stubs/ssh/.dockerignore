@@ -1,0 +1,10 @@
+.git
+.build
+.env
+.env.*
+auth.json
+node_modules
+vendor
+storage
+public/uploads
+public/storage
