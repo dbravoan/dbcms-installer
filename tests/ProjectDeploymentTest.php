@@ -32,7 +32,7 @@ it('allows omitting deployment while recording the public composition without co
         ->not->toContain('private-fixture-key')
         ->and(file_get_contents($app.'/.env'))->toBe('APP_KEY=private-fixture-key')
         ->and(file_get_contents($app.'/README.md'))->toContain('# site', 'dbcms:site:pending', 'php artisan serve', '/install', 'composer.lock', 'db-minimal', 'termocms', 'client_area', 'before_after')
-        ->not->toContain('{{START_COMMAND}}', 'private-fixture-key', 'docs/DEPLOYMENT.md')
+        ->not->toContain('{{START_COMMAND}}', '{{CHECKOUT_INSTRUCTIONS}}', 'private-fixture-key', 'docs/DEPLOYMENT.md', 'composer:2 install')
         ->and(file_get_contents($app.'/AGENTS.md'))->toContain('CORE_AND_EXTENSIONS.md', 'EXTENSIONS.md', 'CONVENTIONS.md', 'kit de administración')
         ->not->toContain('laravel/boost', 'private-fixture-key')
         ->and(file_get_contents($app.'/CLAUDE.md'))->toBe("@AGENTS.md\n")

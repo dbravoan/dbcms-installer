@@ -38,8 +38,10 @@ No añadas esa cabecera a HTML, API ni respuestas con credenciales. En desarroll
 Prepara `.env` fuera de Git, partiendo de `.env.example`, que conserva los temas,
 módulos y bloques elegidos. Configura `APP_ENV=production`, `APP_DEBUG=false`,
 `APP_MAINTENANCE_DRIVER=file` y la URL HTTPS. El archivo debe ser privado (`0600`)
-y legible por PHP y los workers. Para una instalación nueva genera una `APP_KEY`
-una sola vez; nunca sustituyas claves de una instalación existente.
+y legible por PHP y los workers. En una instalación nueva, genera la `APP_KEY`
+una sola vez. Genera también un código con
+`php -r 'echo bin2hex(random_bytes(32)), PHP_EOL;'` y guárdalo como
+`CMS_INSTALL_TOKEN` en el `.env` del servidor antes de abrir `/install`.
 
 Conserva `APP_KEY`, `CMS_INSTALLATION_ID`, claves OAuth, `.env`, `storage` y medios
 entre releases. Antes de completar `/install`, usa `CACHE_STORE=file`,

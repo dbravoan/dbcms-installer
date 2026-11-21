@@ -58,7 +58,7 @@ foreach ([[false, 'none'], [false, 'ssh'], [true, 'none'], [true, 'ssh']] as [$s
         'theme' => 'default-clean', 'admin_theme' => 'dbcms', 'modules' => $modules, 'blocks' => $blocks,
     ]);
     $readme = file_get_contents($project.'/README.md');
-    foreach (['# '.$project, 'dbcms:site:pending', $sail ? './vendor/bin/sail npm ci' : "\nnpm ci\n", $deploy === 'ssh' ? 'external_blocks' : 'Ninguno adicional'] as $needle) {
+    foreach (['# '.$project, 'dbcms:site:pending', 'storage/installed', 'CMS_INSTALL_TOKEN', $sail ? './vendor/bin/sail npm ci' : "\nnpm ci\n", $sail ? 'composer:2 install' : 'php artisan key:generate', $deploy === 'ssh' ? 'external_blocks' : 'Ninguno adicional'] as $needle) {
         if (!str_contains($readme, $needle)) { throw new RuntimeException('Missing documentation in '.$project.': '.$needle); }
     }
     if (!str_contains(file_get_contents($project.'/AGENTS.md'), 'Contratos de extensión') || trim(file_get_contents($project.'/CLAUDE.md')) !== '@AGENTS.md') {

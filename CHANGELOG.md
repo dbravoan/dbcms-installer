@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.2.1
+
+- Guía de instalación actualizada para crear webs con PHP local o con Docker y Sail.
+- Los README generados explican cómo arrancar un checkout desde otro equipo y recuperar una instalación existente.
+
 ## 0.2.0
 
 - `--theme`, `--admin-theme`, `--module`, `--block-package` y `--package` aceptan listas separadas por comas y opciones repetidas. Los temas del primer elemento de cada lista quedan activos.

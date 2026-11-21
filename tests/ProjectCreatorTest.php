@@ -72,8 +72,8 @@ it('only prepares Sail when requested', function (): void {
     $commands = array_column($this->runner->calls, 'command');
     expect(array_values(array_filter($commands, fn (array $command): bool => in_array('sail:install', $command, true))))->toHaveCount(1);
     expect(file_get_contents($this->directory.'/sail-site/.env.example'))->toContain("APP_NAME=dbCMS\n");
-    expect(file_get_contents($this->directory.'/sail-site/README.md'))->toContain('# sail-site', './vendor/bin/sail up -d', './vendor/bin/sail npm ci', './vendor/bin/sail npm run build', 'Ninguno adicional')
-        ->not->toContain('php artisan serve', '{{START_COMMAND}}', '{{NODE_PREFIX}}');
+    expect(file_get_contents($this->directory.'/sail-site/README.md'))->toContain('# sail-site', './vendor/bin/sail up -d', './vendor/bin/sail npm ci', './vendor/bin/sail npm run build', 'Ninguno adicional', 'composer:2 install', './vendor/bin/sail composer install', './vendor/bin/sail artisan key:generate')
+        ->not->toContain('php artisan serve', '{{START_COMMAND}}', '{{CHECKOUT_INSTRUCTIONS}}');
 });
 
 it('preserves a custom application name in the environment example', function (): void {

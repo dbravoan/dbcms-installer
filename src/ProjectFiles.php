@@ -37,7 +37,7 @@ final class ProjectFiles
             '{{BLOCKS}}' => $this->extensionList($composition['blocks']),
             '{{ENVIRONMENT}}' => $selection->sail ? 'Laravel Sail con MySQL' : 'PHP local con MySQL',
             '{{START_COMMAND}}' => $selection->sail ? './vendor/bin/sail up -d' : 'php artisan serve',
-            '{{NODE_PREFIX}}' => $selection->sail ? './vendor/bin/sail ' : '',
+            '{{CHECKOUT_INSTRUCTIONS}}' => rtrim($this->stub($root.'/stubs/checkout/'.($selection->sail ? 'sail' : 'local').'.md')),
         ]);
         if ($selection->deploy === 'ssh') {
             $iterator = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($root.'/stubs/ssh', \FilesystemIterator::SKIP_DOTS));

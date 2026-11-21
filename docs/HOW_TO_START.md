@@ -4,7 +4,10 @@ Crea una web local con el tema público `db-cyber`, el panel `dbcms` y Blog. Usa
 
 ## 1. Prepara y arranca la aplicación
 
-Necesitas PHP 8.4, Composer 2, Node.js 22.12 o posterior y MySQL. Usa una base vacía y un usuario con permisos para crear y modificar sus tablas. Los pasos generales de instalación y las opciones de Sail están en el [README del instalador](../README.md).
+Este ejemplo usa PHP 8.4, Composer 2, Node.js 22.12 o posterior con npm y MySQL.
+Usa una base vacía y un usuario con permisos para crear y modificar sus tablas.
+Si partes de un equipo con Docker, sigue primero el [arranque con contenedores](../README.md#sail-y-contenedores)
+y añade `--theme=db-cyber --module=blog` al comando que crea la web.
 
 Instala el CLI y crea la web desde un directorio donde aún no exista `davidbravo`.
 
@@ -16,9 +19,14 @@ cd davidbravo
 php artisan serve
 ```
 
-El CLI integra los paquetes con Laravel y compila los recursos. Abre `/install` en la URL que indique el servidor. Para crear la web con Docker y Sail, sigue el [arranque con contenedores](../README.md#sail-y-contenedores).
+El CLI integra los paquetes con Laravel y compila los recursos. Al crear la
+web en el entorno local, la salida de `dbcms new` incluye estas líneas.
 
-![Salida de dbcms new con el enlace al asistente](how-to-start/00-salida-instalador.png)
+```text
+No se ha migrado ni configurado ninguna base de datos.
+Desde el proyecto: php artisan serve
+Abre /install en la URL de tu aplicación para configurar MySQL, administrador e información legal.
+```
 
 Revisa el `README.md` generado para consultar la composición inicial y
 `AGENTS.md` para acceder a los arneses de desarrollo. Installer también

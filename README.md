@@ -20,50 +20,66 @@ seleccionados y crea la cuenta administradora.
 
 ## Crear una web
 
-### 1. Comprueba los requisitos
+Elige [Sail y contenedores](#sail-y-contenedores) si partes de un equipo con
+Docker. Si ya tienes PHP, Composer y Node, puedes usar la
+[instalación local](#instalación-local). Ambas rutas crean Laravel, instalan
+los paquetes que elijas y compilan los recursos antes de abrir `/install`.
+
+### Instalación local
 
 Necesitas PHP 8.4 con las extensiones que exige Core, Composer 2 y Node.js 22.12
 o posterior con npm. Composer comprueba extensiones como `pdo_mysql`, `dom`,
-`fileinfo`, `gd`, `intl` y `curl` al resolver Core. El instalador usa el esqueleto
-oficial de Laravel `v13.11.0` y requiere que Composer pueda resolver los paquetes
-elegidos en las versiones solicitadas.
-
-Para completar el asistente, prepara una base MySQL vacía, un usuario con
-permisos para crear sus tablas y los datos del titular del sitio. Con
-[Sail](#sail-y-contenedores), Docker proporciona MySQL.
-
-### 2. Instala el comando
+`fileinfo`, `gd`, `intl` y `curl` al resolver Core. Para el asistente, prepara una
+base MySQL vacía y un usuario con permisos para crear sus tablas.
 
 ```bash
 composer global require 'dbravoan/dbcms-installer:~0.2.0'
 export PATH="$(composer global config bin-dir --absolute):$PATH"
-dbcms new --help
-```
-
-Guarda el directorio de binarios de Composer en el `PATH` de tu shell para usar
-`dbcms` en futuras sesiones.
-
-### 3. Crea y arranca la aplicación
-
-Desde un directorio escribible, elige un nombre para la web que aún no exista.
-
-```bash
 dbcms new mi-web
 cd mi-web
 php artisan serve
 ```
 
-La instalación por defecto usa el tema público `default-clean` y la apariencia
-de panel integrada `dbcms`. [Selecciona paquetes](#seleccionar-paquetes) para
-personalizarla. Mantén el servidor en ejecución y abre `http://127.0.0.1:8000/install`.
-Si el comando muestra otro puerto, usa ese puerto.
+Ejecuta `dbcms new` en un directorio escribible y elige un nombre de destino
+que aún no exista. Guarda el directorio de binarios de Composer en el `PATH`
+de tu shell para usar `dbcms` en futuras sesiones. Con el servidor en ejecución,
+abre `/install` en la dirección que muestra `php artisan serve`, normalmente
+`http://127.0.0.1:8000/install`.
 
-La web generada incluye un README con su composición inicial y una guía
-`AGENTS.md` para desarrollar con los contratos de dbCMS. Desde ella se abren
-los flujos para módulos propios, temas y plantillas, con entradas para Codex,
-OpenCode, Gemini CLI y Claude Code.
+### Sail y contenedores
 
-### 4. Completa el asistente web
+Necesitas Git, un shell compatible con Bash y Docker con Compose en ejecución.
+En Windows, usa WSL2 con la integración de Docker. Clona el repositorio de
+Installer para obtener su entorno `tools`. Dentro del contenedor se ejecutan
+PHP, Composer y Node durante la creación de la web. [Laravel Sail](https://laravel.com/framework/docs/sail)
+
+```bash
+git clone --branch v0.2.1 --depth 1 https://github.com/dbravoan/dbcms-installer.git
+cd dbcms-installer
+docker compose build tools
+docker compose run --rm -T --user "$(id -u):$(id -g)" -e HOME=/tmp \
+  tools composer install --no-dev --no-interaction
+mkdir -p ../sitios
+docker compose run --rm -T --user "$(id -u):$(id -g)" -e HOME=/tmp \
+  -v "$(cd ../sitios && pwd):/sites" tools php bin/dbcms new /sites/mi-web --sail
+cd ../sitios/mi-web
+./vendor/bin/sail up -d
+```
+
+`--sail` prepara la configuración. `sail up` arranca los servicios de Laravel
+y MySQL. Si ya tienes el CLI de Composer, también puedes generar ese entorno
+con `dbcms new mi-web --sail` desde tu instalación local.
+
+Abre `http://localhost/install`. Si el puerto HTTP está ocupado, configura
+`APP_PORT` en `.env` antes de arrancar Sail y úsalo en la URL. En el asistente,
+usa `mysql` como host, `3306` como puerto interno y los valores de `DB_DATABASE`,
+`DB_USERNAME` y `DB_PASSWORD` que Sail ha preparado en `.env`.
+
+### Completa el asistente web
+
+Por defecto se usa el tema público `default-clean` y la apariencia de panel
+integrada `dbcms`. Consulta cómo [seleccionar paquetes](#seleccionar-paquetes)
+y los pasos de arranque y recuperación del README generado en tu web.
 
 1. **Acceso.** Abre `/install`, introduce el valor de `CMS_INSTALL_TOKEN` del
    `.env` de la web y pulsa **Abrir el asistente**. `cms:setup` genera el código
@@ -96,43 +112,19 @@ vuelva a mostrar la URL y recarga el paso del asistente.
 ### Recupera el acceso al asistente
 
 Si pierdes la sesión o el asistente vuelve a pedir acceso tras el aprovisionamiento,
-genera un código nuevo con `openssl rand -hex 32` y sustituye `CMS_INSTALL_TOKEN`
-en el `.env` de esa web. Abre `/install` e introduce el código nuevo. Si el
-aprovisionamiento ya terminó correctamente, retoma en `/install/admin` para
-configurar el sitio y crear la cuenta administradora.
-
-## Sail y contenedores
-
-Con Docker y Docker Compose puedes crear la web con Sail y arrancar juntos
-Laravel y MySQL. Desde el directorio donde quieras crear la web, ejecuta lo siguiente.
+genera un código nuevo con PHP. En un proyecto Sail, ejecuta el segundo comando
+desde la raíz de la web con Sail arrancado.
 
 ```bash
-dbcms new mi-web --sail
-cd mi-web
-./vendor/bin/sail up -d
+# PHP local
+php -r 'echo bin2hex(random_bytes(32)), PHP_EOL;'
+# Sail
+./vendor/bin/sail php -r 'echo bin2hex(random_bytes(32)), PHP_EOL;'
 ```
 
-Abre `http://localhost/install` con el puerto predeterminado de Sail. Si cambias
-`APP_PORT` en `.env`, inclúyelo en la URL. En el [asistente](#4-completa-el-asistente-web),
-usa `mysql` como host y `3306` como puerto interno. Lee `DB_DATABASE`,
-`DB_USERNAME` y `DB_PASSWORD` del `.env` de la web.
-
-El instalador incluye un entorno Docker para ejecutar el CLI sin PHP, Composer
-ni Node en el host. Ejecuta estos comandos desde el checkout del instalador con
-un directorio de salida escribible.
-
-```bash
-docker compose build tools
-docker compose run --rm -T tools composer install --no-interaction
-mkdir -p ../sitios
-docker compose run --rm -T -v "$(realpath ../sitios):/sites" tools php bin/dbcms new /sites/mi-web --no-interaction --sail
-cd ../sitios/mi-web
-./vendor/bin/sail up -d
-```
-
-En Linux, añade `--user "$(id -u):$(id -g)"` a ambas invocaciones de
-`docker compose run` y usa un checkout y cachés escribibles por tu usuario.
-Así podrás leer el `.env` que genera el instalador.
+Sustituye `CMS_INSTALL_TOKEN` en el `.env` de esa web. Abre `/install` e
+introduce el código nuevo. Si el aprovisionamiento ya terminó, retoma en
+`/install/admin` para configurar el sitio y crear la cuenta administradora.
 
 ## Seleccionar paquetes
 
@@ -140,7 +132,9 @@ Así podrás leer el `.env` que genera el instalador.
 listas separadas por comas. También puedes repetir cada opción. En las opciones
 por tipo usa un nombre Composer completo o el sufijo de un paquete de
 `dbravoan`, como `content-audit` en `--module`. En `--package` escribe siempre
-`vendor/paquete`. Composer instala los paquetes desde sus repositorios configurados.
+`vendor/paquete`. Composer consulta Packagist por defecto. Core comprueba que
+cada paquete indicado por tipo corresponda a la opción. Consulta también
+`dbcms new --help`.
 
 ```bash
 dbcms new mi-blog --theme=db-cyber,db-editorial --module=blog,gallery --sail
@@ -148,16 +142,16 @@ dbcms new mi-portal --admin-theme=termocms --block-package=before-after,scrollyt
 dbcms new mi-agenda --module='acme/dbcms-module-agenda:^0.1'
 ```
 
-Se instalan todos los temas indicados y se activa el primero de cada lista. Si
-omites la opción de un tipo de tema, Core toma el primero de ese tipo incluido
-en `--package`. Puedes indicar una restricción de versión tras `:`. Para combinar
-límites en un rango, sepáralos con espacios, como en `--module='blog:>=0.0.1 <0.1,gallery'`.
+Se instalan todos los temas indicados y el primero de cada lista se preselecciona
+en `/install`. Si omites la opción de un tipo de tema, Core toma el primero de
+ese tipo incluido en `--package`. Puedes indicar una restricción de versión
+tras `:`. Para combinar límites en un rango, sepáralos con espacios, como en
+`--module='blog:>=0.0.1 <0.1,gallery'`.
 
 Core lee los identificadores internos de los módulos y paquetes de bloques
 descargados, incluidos los que llegan como dependencias. La selección se escribe
-en `.env` y `.env.example`.
-`CMS_MODULES` se aplica al aprovisionar una web nueva. Una vez instalada, Core
-carga los proveedores de los módulos registrados como instalados en la base de datos.
+en `.env` y `.env.example`. El aprovisionamiento de `/install` instala y activa
+los módulos y habilita los paquetes de bloques de la selección.
 
 ## Añadir módulos a una web existente
 
@@ -292,8 +286,8 @@ scripts para construir una release y desplegarla por SSH. Configura los
 secretos del entorno `production` y activa `DEPLOY_ENABLED=true` según la guía
 `docs/DEPLOYMENT.md` de la web generada. Si vas a gestionar el despliegue de otra
 forma, usa `--deploy=none` al crear la web.
-Antes del primer acceso por HTTPS a `/install`, genera en el servidor un código
-con `openssl rand -hex 32` y guarda el valor como `CMS_INSTALL_TOKEN` en su `.env`.
+Antes del primer acceso por HTTPS a `/install`, prepara el código de instalación
+en el servidor. [Variables de la primera instalación](docs/DEPLOYMENT.md#preparar-el-vps)
 
 ## Fallos y archivos existentes
 

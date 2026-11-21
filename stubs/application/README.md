@@ -32,14 +32,32 @@ Abre `/install` en la dirección del servidor. Usa en el navegador el código de
 
 ## Trabajar desde otro checkout
 
-Prepara el `.env` del entorno a partir de `.env.example` y ejecuta `composer install`. Con Sail, arranca el entorno con el comando anterior antes de ejecutar npm.
+**Web existente.** Recupera su `.env` con la `APP_KEY` original, la base de datos y
+los archivos de `storage`, incluido `storage/installed`, las claves OAuth y los
+medios. Ajusta la URL y la conexión MySQL al entorno donde la vayas a abrir.
+
+**Web que todavía vas a instalar.** Crea `.env` a partir de `.env.example` si
+aún no existe. Conserva la composición `CMS_*` y ajusta estos valores antes de
+arrancar, para que el asistente pueda abrirse con la base vacía.
 
 ```bash
-{{NODE_PREFIX}}npm ci
-{{NODE_PREFIX}}npm run build
+test -e .env || (umask 077 && cp .env.example .env)
 ```
 
-Versiona `composer.json`, `composer.lock`, `package.json`, `package-lock.json` y `.env.example`. Mantén el `.env`, las claves y los datos de `storage` en el entorno correspondiente. Si la web es nueva y no tiene código de instalación, genera uno con `openssl rand -hex 32` y guárdalo como `CMS_INSTALL_TOKEN` en su `.env`. Para recuperar una web existente, utiliza sus claves, archivos y base de datos.
+```dotenv
+DB_CONNECTION=mysql
+SESSION_DRIVER=file
+SESSION_ENCRYPT=true
+CACHE_STORE=file
+QUEUE_CONNECTION=sync
+```
+
+{{CHECKOUT_INSTRUCTIONS}}
+
+En una web restaurada, abre la ruta de acceso de tu panel. La predeterminada
+es `/admin/login`. Versiona `composer.json`, `composer.lock`, `package.json`,
+`package-lock.json` y `.env.example`. Guarda `.env`, claves y datos de `storage`
+en las copias privadas del entorno.
 
 ## Dónde hacer cambios
 
