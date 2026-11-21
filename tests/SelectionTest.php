@@ -4,35 +4,44 @@ declare(strict_types=1);
 
 use DbCms\Installer\Selection;
 
-it('installs only core and the reference theme by default', function (): void {
-    expect((new Selection)->requirements())->toBe(['dbravoan/dbcms-core:~0.0.1', 'dbravoan/dbcms-theme-default-clean:~0.0.1']);
+it('asks Composer for Core and delegates the default composition to Core', function (): void {
+    $selection = new Selection;
+    expect($selection->requirements)->toBe(['dbravoan/dbcms-core:~0.0.2'])->and($selection->packages)->toBeEmpty();
 });
 
-it('expresses selected optional packages as real Composer requirements', function (): void {
-    $selection = new Selection('db-minimal', 'termocms', ['blog', 'gallery', 'blog'], ['community/client-area:^1.2'], beforeAfter: true);
-    expect($selection->requirements())->toBe([
-        'dbravoan/dbcms-core:~0.0.1', 'dbravoan/dbcms-theme-db-minimal:~0.0.1',
-        'dbravoan/dbcms-admin-theme-termocms:~0.0.1', 'dbravoan/dbcms-module-blog:~0.0.1',
-        'dbravoan/dbcms-module-gallery:~0.0.1', 'dbravoan/dbcms-blocks-before-after:~0.0.1',
-        'community/client-area:^1.2',
+it('combines comma lists and repeated options in order across all selectors', function (): void {
+    $selection = new Selection([
+        'theme' => ['db-editorial, acme/theme:^2', 'db-cyber'],
+        'admin-theme' => ['termocms,acme/admin'],
+        'module' => ['blog:>=0.0.1 <0.1,gallery', 'blog'],
+        'block-package' => ['before-after,acme/blocks'],
+        'package' => ['community/client-area:^1.2,acme/generic', 'acme/theme'],
     ]);
+
+    expect($selection->requirements)->toBe([
+        'dbravoan/dbcms-core:~0.0.2',
+        'dbravoan/dbcms-theme-db-editorial', 'acme/theme:^2', 'dbravoan/dbcms-theme-db-cyber',
+        'dbravoan/dbcms-admin-theme-termocms', 'acme/admin',
+        'dbravoan/dbcms-module-blog:>=0.0.1 <0.1', 'dbravoan/dbcms-module-gallery',
+        'dbravoan/dbcms-blocks-before-after', 'acme/blocks', 'community/client-area:^1.2', 'acme/generic',
+    ])->and($selection->packages['theme'])->toBe(['dbravoan/dbcms-theme-db-editorial', 'acme/theme', 'dbravoan/dbcms-theme-db-cyber'])
+        ->and($selection->packages['package'])->toBe(['community/client-area', 'acme/generic', 'acme/theme'])
+        ->and($selection->abbreviations)->toBe([
+            'dbravoan/dbcms-theme-db-editorial', 'dbravoan/dbcms-theme-db-cyber', 'dbravoan/dbcms-admin-theme-termocms',
+            'dbravoan/dbcms-module-blog', 'dbravoan/dbcms-module-gallery', 'dbravoan/dbcms-blocks-before-after',
+        ]);
 });
 
-it('lets Composer select the version of an arbitrary vendor package', function (): void {
-    expect((new Selection(additionalPackages: ['other-vendor/account']))->requirements())->toContain('other-vendor/account');
+it('preserves the explicit restriction without duplicating package arguments', function (): void {
+    expect((new Selection(['module' => ['blog,blog:~0.0.1'], 'package' => ['dbravoan/dbcms-module-blog:~0.0.1']]))->requirements)
+        ->toBe(['dbravoan/dbcms-core:~0.0.2', 'dbravoan/dbcms-module-blog:~0.0.1']);
+    expect(fn () => new Selection(['module' => ['blog:^1'], 'package' => ['dbravoan/dbcms-module-blog:^2']]))
+        ->toThrow(InvalidArgumentException::class, 'otra restricción');
 });
 
-it('selects themes from another vendor through their installed identifiers', function (): void {
-    $selection = new Selection('community-clean', 'community-admin', additionalPackages: ['community/theme:^2', 'community/admin:^2']);
-    expect($selection->requirements())->toBe(['dbravoan/dbcms-core:~0.0.1', 'community/theme:^2', 'community/admin:^2']);
-});
-
-it('rejects modules outside the official catalogue', function (): void {
-    expect(fn () => new Selection(modules: ['shop']))->toThrow(InvalidArgumentException::class, 'Módulo oficial desconocido: shop');
-});
-
-it('rejects invalid names and conflicting core restrictions', function (): void {
-    expect(fn () => new Selection(additionalPackages: ["vendor/name\n--bad"]))->toThrow(InvalidArgumentException::class);
-    expect(fn () => (new Selection(additionalPackages: ['dbravoan/dbcms-core:^3']))->requirements())->toThrow(InvalidArgumentException::class, 'otra restricción');
-    expect(fn () => new Selection(modules: ['unknown']))->toThrow(InvalidArgumentException::class);
-});
+it('rejects invalid syntax and package abbreviations without a type', function (string $option, string $value): void {
+    expect(fn () => new Selection([$option => [$value]]))->toThrow(InvalidArgumentException::class, "Cada entrada de --{$option}");
+})->with([
+    ['package', 'blog'], ['package', 'community/client-area,blog'], ['package', "vendor/name\n--bad"],
+    ['module', 'blog,'], ['module', 'blog:'], ['theme', '../bad'], ['admin-theme', '--bad'],
+]);

@@ -35,7 +35,7 @@ permisos para crear sus tablas y los datos del titular del sitio. Con
 ### 2. Instala el comando
 
 ```bash
-composer global require 'dbravoan/dbcms-installer:~0.0.1'
+composer global require 'dbravoan/dbcms-installer:~0.2.0'
 export PATH="$(composer global config bin-dir --absolute):$PATH"
 dbcms new --help
 ```
@@ -53,10 +53,10 @@ cd mi-web
 php artisan serve
 ```
 
-Puedes aceptar `default-clean` como tema público, `dbcms` como apariencia del
-panel y **Sin módulos**, o elegir los paquetes que necesites. Mantén el servidor
-en ejecución y abre `http://127.0.0.1:8000/install`. Si el comando muestra otro
-puerto, usa ese puerto.
+La instalación por defecto usa el tema público `default-clean` y la apariencia
+de panel integrada `dbcms`. [Selecciona paquetes](#seleccionar-paquetes) para
+personalizarla. Mantén el servidor en ejecución y abre `http://127.0.0.1:8000/install`.
+Si el comando muestra otro puerto, usa ese puerto.
 
 La web generada incluye un README con su composición inicial y una guía
 `AGENTS.md` para desarrollar con los contratos de dbCMS. Desde ella se abren
@@ -136,24 +136,26 @@ Así podrás leer el `.env` que genera el instalador.
 
 ## Seleccionar paquetes
 
-Los módulos oficiales se indican con `--modules`, separados por comas. Para un
-módulo de otro proveedor, usa `--package` con su nombre Composer y su restricción
-de versión. El paquete debe estar disponible en un repositorio que Composer pueda
-resolver. Cada ejemplo crea una web distinta.
+`--theme`, `--admin-theme`, `--module`, `--block-package` y `--package` aceptan
+listas separadas por comas. También puedes repetir cada opción. En las opciones
+por tipo usa un nombre Composer completo o el sufijo de un paquete de
+`dbravoan`, como `content-audit` en `--module`. En `--package` escribe siempre
+`vendor/paquete`. Composer instala los paquetes desde sus repositorios configurados.
 
 ```bash
-dbcms new mi-web --no-interaction --modules=blog,gallery
-dbcms new mi-web --no-interaction --package='acme/dbcms-module-agenda:^0.1'
-dbcms new mi-web --no-interaction --theme=db-minimal --admin-theme=termocms --before-after
+dbcms new mi-blog --theme=db-cyber,db-editorial --module=blog,gallery --sail
+dbcms new mi-portal --admin-theme=termocms --block-package=before-after,scrollytelling
+dbcms new mi-agenda --module='acme/dbcms-module-agenda:^0.1'
 ```
 
-Puedes repetir `--package`. Para un tema externo, añade también su identificador
-con `--theme` o `--admin-theme`.
+Se instalan todos los temas indicados y se activa el primero de cada lista. Si
+omites la opción de un tipo de tema, Core toma el primero de ese tipo incluido
+en `--package`. Puedes indicar una restricción de versión tras `:`. Para combinar
+límites en un rango, sepáralos con espacios, como en `--module='blog:>=0.0.1 <0.1,gallery'`.
 
-El CLI usa los sufijos de los paquetes oficiales, como `content-audit`. Core
-usa sus identificadores internos, como `content_audit`. El instalador lee los
-identificadores de los módulos y paquetes de bloques descargados, incluidos
-los que llegan como dependencias, y escribe la selección en `.env` y `.env.example`.
+Core lee los identificadores internos de los módulos y paquetes de bloques
+descargados, incluidos los que llegan como dependencias. La selección se escribe
+en `.env` y `.env.example`.
 `CMS_MODULES` se aplica al aprovisionar una web nueva. Una vez instalada, Core
 carga los proveedores de los módulos registrados como instalados en la base de datos.
 

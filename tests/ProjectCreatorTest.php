@@ -22,18 +22,15 @@ afterEach(function (): void {
 });
 
 it('creates a project atomically and delegates setup without migrations', function (): void {
-    $this->runner->installed = [
-        ['type' => 'dbcms-module', 'extra' => ['dbcms' => ['identifier' => 'client_area']]],
-        ['type' => 'dbcms-module', 'extra' => ['dbcms' => ['identifier' => 'blog']]],
-        ['type' => 'dbcms-block-package', 'extra' => ['dbcms' => ['identifier' => 'before_after']]],
-    ];
-    $result = $this->creator->create('site', new Selection(additionalPackages: ['community/client-area']), $this->directory);
+    $this->runner->composition['modules'] = ['client_area', 'blog'];
+    $this->runner->composition['blocks'] = ['before_after'];
+    $result = $this->creator->create('site', new Selection(['package' => ['community/client-area']]), $this->directory);
     expect($result)->toBe($this->directory.'/site')->and(is_file($result.'/composer.json'))->toBeTrue();
     expect(file_get_contents($result.'/.env.example'))->toContain("APP_NAME=dbCMS\n")->not->toContain('APP_NAME=Laravel');
     $commands = array_column($this->runner->calls, 'command');
-    $setup = array_values(array_filter($commands, fn (array $command): bool => in_array('cms:setup', $command, true)))[0];
+    $setupPosition = array_find_key($commands, fn (array $command): bool => in_array('--theme=default-clean', $command, true));
+    $setup = $commands[$setupPosition];
     expect($setup)->toContain('--modules=client_area,blog', '--blocks=before_after', '--theme=default-clean', '--admin-theme=dbcms');
-    $setupPosition = array_find_key($commands, fn (array $command): bool => in_array('cms:setup', $command, true));
     $autoloadPosition = array_search(['composer', 'dump-autoload', '--no-scripts', '--no-interaction'], $commands, true);
     $buildPosition = array_search(['npm', 'run', 'build'], $commands, true);
     expect($autoloadPosition)->toBeInt()->toBeGreaterThan($setupPosition)->toBeLessThan($buildPosition);
@@ -94,8 +91,31 @@ it('uses the default Composer stability when creating a project', function (): v
     expect(array_filter($this->runner->calls, fn (array $call): bool => in_array('minimum-stability', $call['command'], true)))->toBeEmpty();
 });
 
-it('rejects malformed installed contributions before setup', function (): void {
-    $this->runner->installed = [['type' => 'dbcms-module', 'extra' => ['dbcms' => ['identifier' => '../bad']]]];
+it('rejects malformed composition before writing the application', function (): void {
+    $this->runner->composition['modules'] = ['../bad'];
     expect(fn () => $this->creator->create('bad-extension', new Selection, $this->directory))->toThrow(RuntimeException::class);
-    expect(array_filter($this->runner->calls, fn (array $call): bool => in_array('cms:setup', $call['command'], true)))->toBeEmpty();
+    expect(file_exists($this->directory.'/bad-extension'))->toBeFalse();
+    expect(array_filter($this->runner->calls, fn (array $call): bool => in_array('--theme=default-clean', $call['command'], true)))->toBeEmpty();
 });
+
+it('installs the fallback named by Core and resolves the composition again', function (): void {
+    $this->runner->requiredThemePackage = 'community/default';
+    $this->creator->create('fallback', new Selection, $this->directory);
+    $commands = array_column($this->runner->calls, 'command');
+    $requires = array_values(array_filter($commands, fn (array $command): bool => $command[1] === 'require'));
+    expect($requires)->toHaveCount(2)
+        ->and($requires[0])->toContain('dbravoan/dbcms-core:~0.0.2')->not->toContain('community/default')
+        ->and($requires[1])->toContain('community/default');
+    expect(array_filter($commands, fn (array $command): bool => in_array('--resolve-packages={}', $command, true)))->toHaveCount(2);
+});
+
+it('probes missing shorthand names only after failure and lets Composer report full names', function (string $flag, string $value, string $message, bool $probe): void {
+    $name = 'dbravoan/dbcms-module-missing';
+    $this->runner->missingPackages = [$name];
+    $selection = new Selection([$flag => [$value]]);
+    expect(fn () => $this->creator->create('missing', $selection, $this->directory))->toThrow(RuntimeException::class, $message);
+    expect(array_filter($this->runner->calls, fn (array $call): bool => $call['command'][1] === 'show'))->toHaveCount($probe ? 1 : 0);
+})->with([
+    ['module', 'missing', 'No se encuentra el paquete dbravoan/dbcms-module-missing', true],
+    ['package', 'dbravoan/dbcms-module-missing', 'Composer no pudo resolver las dependencias', false],
+]);

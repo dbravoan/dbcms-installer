@@ -4,8 +4,8 @@
 
 | Pieza | Responsabilidad |
 | --- | --- |
-| `NewCommand` | Lee opciones y recoge las decisiones interactivas. |
-| `Selection` y `Catalog` | Validan la selección, fijan el esqueleto Laravel y resuelven requisitos Composer. |
+| `NewCommand` | Lee las opciones y muestra ejemplos de uso. |
+| `Selection` | Normaliza las listas, amplía las abreviaturas por tipo y reúne los requisitos de Composer. |
 | `ProjectCreator` y `ProcessRunner` | Ejecutan Composer, `cms:setup` y Vite en un directorio temporal. El destino se publica tras completar esas fases. Las pruebas controlan los procesos mediante `FakeRunner`. |
 | `ProjectFiles` | Genera los README, arneses y archivos de despliegue a partir de `stubs/`. |
 
@@ -41,14 +41,14 @@ procesos simulados no sustituyen esa comprobación.
 
 ## Dependencias
 
-La línea `0.0` utiliza Core `~0.0.1`, PHP 8.4, Laravel 13 y Node 22.12 o posterior. El esqueleto
-Laravel está fijado en `Catalog::LARAVEL_VERSION`. Cambiarlo requiere comprobar
+La línea `0.2` utiliza Core `~0.0.2`, PHP 8.4, Laravel 13 y Node 22.12 o posterior. El esqueleto
+Laravel está fijado en `ProjectCreator::LARAVEL_VERSION`. Cambiarlo requiere comprobar
 el resultado real de `cms:setup`, Vite, el asistente y Sail. Composer conserva el
 lockfile de la aplicación generada.
 
-Los nombres del catálogo ayudan a seleccionar módulos. Composer resuelve
-dependencias y Core gestiona su ciclo de vida. Usa `--package` para extensiones
-de terceros.
+Composer resuelve dependencias. Antes de preparar la aplicación, `cms:setup`
+resuelve la composición desde los metadatos instalados y comprueba el tipo de
+cada paquete indicado en una opción por tipo.
 
 ## Publicar
 

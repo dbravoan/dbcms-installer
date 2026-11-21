@@ -9,9 +9,9 @@ Necesitas PHP 8.4, Composer 2, Node.js 22.12 o posterior y MySQL. Usa una base v
 Instala el CLI y crea la web desde un directorio donde aún no exista `davidbravo`.
 
 ```bash
-composer global require 'dbravoan/dbcms-installer:~0.0.1'
+composer global require 'dbravoan/dbcms-installer:~0.2.0'
 export PATH="$(composer global config bin-dir --absolute):$PATH"
-dbcms new davidbravo --no-interaction --theme=db-cyber --modules=blog
+dbcms new davidbravo --no-interaction --theme=db-cyber --module=blog
 cd davidbravo
 php artisan serve
 ```

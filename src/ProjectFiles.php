@@ -6,10 +6,8 @@ namespace DbCms\Installer;
 
 final class ProjectFiles
 {
-    /** @param list<string> $modules
-     * @param  list<string>  $blocks
-     */
-    public function write(string $project, string $name, Selection $selection, array $modules, array $blocks): void
+    /** @param array{theme: string, admin_theme: string, modules: list<string>, blocks: list<string>} $composition */
+    public function write(string $project, string $name, Selection $selection, array $composition): void
     {
         $example = $this->path($project, '.env.example');
         if (! is_file($example)) {
@@ -25,7 +23,7 @@ final class ProjectFiles
         }
         $contents = preg_replace('/^(?:CMS_THEME|CMS_BRAND|CMS_MODULES|CMS_BLOCK_PACKAGES)=.*\R?/m', '', $contents) ?? $contents;
         $contents = rtrim($contents)."\n\n";
-        foreach (['CMS_THEME' => $selection->theme, 'CMS_BRAND' => $selection->adminTheme, 'CMS_MODULES' => implode(',', $modules), 'CMS_BLOCK_PACKAGES' => implode(',', $blocks)] as $key => $value) {
+        foreach (['CMS_THEME' => $composition['theme'], 'CMS_BRAND' => $composition['admin_theme'], 'CMS_MODULES' => implode(',', $composition['modules']), 'CMS_BLOCK_PACKAGES' => implode(',', $composition['blocks'])] as $key => $value) {
             $contents .= $key.'='.$value."\n";
         }
         $this->put($example, $contents);
@@ -33,10 +31,10 @@ final class ProjectFiles
         $source = $root.'/stubs/application';
         $readme = strtr($this->stub($source.'/README.md'), [
             '{{PROJECT_NAME}}' => str_replace('_', '\\_', $name),
-            '{{THEME}}' => $selection->theme,
-            '{{ADMIN_THEME}}' => $selection->adminTheme,
-            '{{MODULES}}' => $this->extensionList($modules),
-            '{{BLOCKS}}' => $this->extensionList($blocks),
+            '{{THEME}}' => $composition['theme'],
+            '{{ADMIN_THEME}}' => $composition['admin_theme'],
+            '{{MODULES}}' => $this->extensionList($composition['modules']),
+            '{{BLOCKS}}' => $this->extensionList($composition['blocks']),
             '{{ENVIRONMENT}}' => $selection->sail ? 'Laravel Sail con MySQL' : 'PHP local con MySQL',
             '{{START_COMMAND}}' => $selection->sail ? './vendor/bin/sail up -d' : 'php artisan serve',
             '{{NODE_PREFIX}}' => $selection->sail ? './vendor/bin/sail ' : '',

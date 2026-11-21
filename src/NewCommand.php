@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace DbCms\Installer;
 
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Formatter\OutputFormatter;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -13,6 +14,14 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 
 final class NewCommand extends Command
 {
+    private const PACKAGE_OPTIONS = [
+        'theme' => 'Temas públicos. El primero queda activo',
+        'admin-theme' => 'Temas de panel. El primero queda activo',
+        'module' => 'Módulos',
+        'block-package' => 'Paquetes de bloques',
+        'package' => 'Paquetes adicionales con nombre completo vendor/paquete',
+    ];
+
     public function __construct(private readonly ProjectCreator $creator = new ProjectCreator)
     {
         parent::__construct('new');
@@ -21,40 +30,31 @@ final class NewCommand extends Command
     protected function configure(): void
     {
         $this->setDescription('Crea una aplicación Laravel nueva con los paquetes dbCMS seleccionados.')
+            ->setHelp(<<<'HELP'
+                Separa los paquetes por comas o repite la opción. Cada entrada acepta una restricción tras ':'.
+                Las opciones por tipo admiten nombres completos y abreviaturas de los paquetes de dbravoan.
+
+                  dbcms new mi-web --theme=db-cyber,db-editorial --admin-theme=termocms --module=blog,gallery
+                  dbcms new mi-web --block-package=before-after,scrollytelling --package='acme/agenda:^1,acme/mapas' --sail
+                  dbcms new mi-web --module='blog:>=0.0.1 <0.1,gallery'
+                HELP)
             ->addArgument('directory', InputArgument::REQUIRED, 'Directorio nuevo de la aplicación')
-            ->addOption('theme', null, InputOption::VALUE_REQUIRED, 'Tema público oficial', 'default-clean')
-            ->addOption('admin-theme', null, InputOption::VALUE_REQUIRED, 'Apariencia admin oficial', 'dbcms')
-            ->addOption('modules', null, InputOption::VALUE_REQUIRED, 'Módulos oficiales separados por comas', '')
-            ->addOption('package', null, InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY, 'Paquete adicional vendor/nombre[:restricción]')
-            ->addOption('before-after', null, InputOption::VALUE_NONE, 'Instala y selecciona el bloque Before/After')
             ->addOption('sail', null, InputOption::VALUE_NONE, 'Prepara Laravel Sail con MySQL')
             ->addOption('deploy', null, InputOption::VALUE_REQUIRED, 'Workflow de GitHub Actions para SSH o none para omitirlo', Selection::DEFAULT_DEPLOYMENT);
+        foreach (self::PACKAGE_OPTIONS as $option => $description) {
+            $this->addOption($option, null, InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY, $description);
+        }
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
         try {
-            $theme = (string) $input->getOption('theme');
-            $admin = (string) $input->getOption('admin-theme');
-            $modules = self::csv((string) $input->getOption('modules'));
-            if ($input->isInteractive()) {
-                if (! $input->hasParameterOption('--theme')) {
-                    $theme = $io->choice('Tema público', Catalog::THEMES, 'default-clean');
-                }
-                if (! $input->hasParameterOption('--admin-theme')) {
-                    $admin = $io->choice('Apariencia del panel', Catalog::ADMIN_THEMES, 'dbcms');
-                }
-                if (! $input->hasParameterOption('--modules')) {
-                    $choices = ['Sin módulos', ...Catalog::MODULES];
-                    $modules = array_values(array_filter((array) $io->choice('Módulos opcionales (selección múltiple)', $choices, 'Sin módulos', true), static fn (string $module): bool => $module !== 'Sin módulos'));
-                }
-            }
-            /** @var list<string> $packages */
-            $packages = $input->getOption('package');
-            $selection = new Selection($theme, $admin, $modules, $packages, (bool) $input->getOption('before-after'), (bool) $input->getOption('sail'), (string) $input->getOption('deploy'));
+            /** @var array<string, list<string>> $options */
+            $options = array_intersect_key($input->getOptions(), self::PACKAGE_OPTIONS);
+            $selection = new Selection($options, (bool) $input->getOption('sail'), (string) $input->getOption('deploy'));
             $io->title('Crear una web con dbCMS');
-            $io->listing($selection->requirements());
+            $io->listing(array_map(OutputFormatter::escape(...), $selection->requirements));
             $destination = $this->creator->create((string) $input->getArgument('directory'), $selection);
             $io->success('Aplicación creada en '.$destination);
             $io->text('No se ha migrado ni configurado ninguna base de datos.');
@@ -66,15 +66,9 @@ final class NewCommand extends Command
 
             return self::SUCCESS;
         } catch (\Throwable $error) {
-            $io->error($error->getMessage());
+            $io->error(OutputFormatter::escape($error->getMessage()));
 
             return self::FAILURE;
         }
-    }
-
-    /** @return list<string> */
-    private static function csv(string $value): array
-    {
-        return array_values(array_unique(array_filter(array_map('trim', explode(',', $value)), static fn (string $item): bool => $item !== '')));
     }
 }

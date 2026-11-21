@@ -54,7 +54,9 @@ foreach ([[false, 'none'], [false, 'ssh'], [true, 'none'], [true, 'ssh']] as [$s
     file_put_contents($project.'/.env.example', "APP_KEY=\n");
     $modules = $deploy === 'ssh' ? ['client_area'] : [];
     $blocks = $deploy === 'ssh' ? ['external_blocks'] : [];
-    $writer->write(getcwd().'/'.$project, $project, new \DbCms\Installer\Selection(sail: $sail, deploy: $deploy), $modules, $blocks);
+    $writer->write(getcwd().'/'.$project, $project, new \DbCms\Installer\Selection(sail: $sail, deploy: $deploy), [
+        'theme' => 'default-clean', 'admin_theme' => 'dbcms', 'modules' => $modules, 'blocks' => $blocks,
+    ]);
     $readme = file_get_contents($project.'/README.md');
     foreach (['# '.$project, 'dbcms:site:pending', $sail ? './vendor/bin/sail npm ci' : "\nnpm ci\n", $deploy === 'ssh' ? 'external_blocks' : 'Ninguno adicional'] as $needle) {
         if (!str_contains($readme, $needle)) { throw new RuntimeException('Missing documentation in '.$project.': '.$needle); }

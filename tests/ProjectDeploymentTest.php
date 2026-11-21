@@ -24,11 +24,8 @@ afterEach(function (): void {
 });
 
 it('allows omitting deployment while recording the public composition without copying secrets', function (): void {
-    $this->runner->installed = [
-        ['type' => 'dbcms-module', 'extra' => ['dbcms' => ['identifier' => 'client_area']]],
-        ['type' => 'dbcms-block-package', 'extra' => ['dbcms' => ['identifier' => 'before_after']]],
-    ];
-    $app = $this->creator->create('site', new Selection(theme: 'db-minimal', adminTheme: 'termocms', deploy: 'none'), $this->directory);
+    $this->runner->composition = ['theme' => 'db-minimal', 'admin_theme' => 'termocms', 'modules' => ['client_area'], 'blocks' => ['before_after']];
+    $app = $this->creator->create('site', new Selection(['theme' => ['db-minimal'], 'admin-theme' => ['termocms']], deploy: 'none'), $this->directory);
 
     expect(file_exists($app.'/.github/workflows/deploy.yml'))->toBeFalse()
         ->and(file_get_contents($app.'/.env.example'))->toContain('CMS_THEME=db-minimal', 'CMS_BRAND=termocms', 'CMS_MODULES=client_area', 'CMS_BLOCK_PACKAGES=before_after')

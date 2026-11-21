@@ -13,7 +13,7 @@ it('supports an unattended CLI installation with explicit optional packages', fu
     $runner = new FakeRunner;
     $tester = new CommandTester(new NewCommand(new ProjectCreator($runner)));
     try {
-        $input = ['directory' => $directory.'/site', '--modules' => 'blog,gallery', '--package' => ['other-vendor/client-area:^1']];
+        $input = ['directory' => $directory.'/site', '--module' => ['blog,gallery', 'content-audit'], '--package' => ['other-vendor/client-area:^1,other-vendor/tools']];
         if ($deployment !== null) {
             $input['--deploy'] = $deployment;
         }
@@ -21,7 +21,7 @@ it('supports an unattended CLI installation with explicit optional packages', fu
         expect($code)->toBe(0)->and($tester->getDisplay())->toContain('Aplicación creada', '/install');
         expect(is_file($directory.'/site/.github/workflows/deploy.yml'))->toBe($deployment !== 'none');
         $require = array_values(array_filter($runner->calls, fn (array $call): bool => ($call['command'][1] ?? null) === 'require'))[0]['command'];
-        expect($require)->toContain('dbravoan/dbcms-module-blog:~0.0.1', 'dbravoan/dbcms-module-gallery:~0.0.1', 'other-vendor/client-area:^1');
+        expect($require)->toContain('dbravoan/dbcms-module-blog', 'dbravoan/dbcms-module-gallery', 'dbravoan/dbcms-module-content-audit', 'other-vendor/client-area:^1', 'other-vendor/tools');
     } finally {
         $iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($directory, FilesystemIterator::SKIP_DOTS), RecursiveIteratorIterator::CHILD_FIRST);
         foreach ($iterator as $file) {
@@ -32,7 +32,9 @@ it('supports an unattended CLI installation with explicit optional packages', fu
 })->with(['por defecto' => [null], 'sin workflow' => ['none']]);
 
 it('returns a failure code and a readable error for invalid selection', function (): void {
-    $tester = new CommandTester(new NewCommand(new ProjectCreator(new FakeRunner)));
-    expect($tester->execute(['directory' => '/unused', '--modules' => 'shop'], ['interactive' => false]))->toBe(1);
-    expect($tester->getDisplay())->toContain('Módulo oficial desconocido: shop');
+    $runner = new FakeRunner;
+    $tester = new CommandTester(new NewCommand(new ProjectCreator($runner)));
+    expect($tester->execute(['directory' => '/unused', '--package' => ['blog']], ['interactive' => false]))->toBe(1);
+    expect($tester->getDisplay())->toContain('Cada entrada de --package debe ser vendor/paquete');
+    expect($runner->calls)->toBeEmpty();
 });
